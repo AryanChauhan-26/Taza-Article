@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+
+const lastUpdated = 'October 17, 2026';
+---
+
+<BaseLayout
+  title="Affiliate Disclosure"
+  description="Affiliate Disclosure statement for Taza Article outlining our participation in referral programs and editorial independence."
+>
+  <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="border-b border-gray-100 pb-6 dark:border-gray-800">
+      <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+        Monetization & Transparency
+      </span>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+        Affiliate Disclosure
+      </h1>
+      <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        Last updated: {lastUpdated}
+      </p>
+    </div>
+
+    <div class="prose prose-emerald mt-8 max-w-none text-sm text-gray-700 dark:prose-invert dark:text-gray-300">
+      <div class="rounded-2xl border border-emerald-500/20 bg-emerald-50/50 p-6 dark:border-emerald-500/10 dark:bg-emerald-950/20">
+        <h3 class="text-base font-bold text-emerald-900 dark:text-emerald-300">
+          In Plain English for Our Readers
+        </h3>
+        <p class="mt-2 text-xs leading-relaxed text-gray-700 dark:text-gray-300">
+          Some of the links on <strong>{siteConfig.name}</strong> are affiliate links. This means that if you click on the link and sign up, register, or make an optional purchase, we may receive a small referral commission at <strong>no additional cost to you</strong>. In fact, many of our links unlock special student discounts, extended free trials, or exclusive developer credits.
+        </p>
+      </div>
+
+      <h2>1. Compliance with FTC and ASCI Guidelines</h2>
+      <p>
+        In accordance with the Federal Trade Commission (FTC) guidelines and the Advertising Standards Council of India (ASCI) guidelines concerning the use of endorsements and testimonials in digital media, we clearly disclose that:
+      </p>
+      <ul>
+        <li>Articles containing affiliate links are identified with an upfront disclosure notice at the top of the article.</li>
+        <li>Individual product boxes contain explicit referral badges and links tagged with <code>rel="nofollow sponsored"</code>.</li>
+      </ul>
+
+      <h2>2. Our Strict Editorial Integrity</h2>
+      <p>
+        Our priority is and will always remain the success and education of computer science students in India. We adhere strictly to the following editorial rules:
+      </p>
+      <ol>
+        <li><strong>We test every tool:</strong> We never promote or write about a platform, database, or API without verifying that it works as advertised.</li>
+        <li><strong>Free tiers take precedence:</strong> If a high-quality free open-source alternative exists (e.g. Bruno vs Postman, Supabase vs AWS RDS), we highlight the free alternative regardless of whether an affiliate program exists.</li>
+        <li><strong>No paid reviews:</strong> We do not accept sponsored posts that dictate positive scores or reviews for subpar tools.</li>
+      </ol>
+
+      <h2>3. Advertisements via Google AdSense</h2>
+      <p>
+        In addition to affiliate links, {siteConfig.name} displays advertisements served through Google AdSense. These ads are clearly demarcated with "Advertisement" or "Sponsored" labels. We do not personally endorse the specific third-party products advertised in automated Google ad slots.
+      </p>
+
+      <h2>4. Questions or Concerns?</h2>
+      <p>
+        If you have any questions regarding our affiliate relationships or want to verify a specific link, please contact our editorial desk at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

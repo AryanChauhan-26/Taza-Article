@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b" />
+      <stop offset="50%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#042f2e" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1050" cy="150" r="280" fill="#10b981" opacity="0.15" />
+  <circle cx="150" cy="500" r="250" fill="#14b8a6" opacity="0.12" />
+  
+  <!-- Badge -->
+  <rect x="100" y="100" width="220" height="44" rx="22" fill="#10b981" fill-opacity="0.25" stroke="#34d399" stroke-width="1.5" />
+  <text x="130" y="128" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="16" font-weight="700" letter-spacing="1">FRESH ARTICLES, EVERY WEEK</text>
+  
+  <!-- Main Title -->
+  <text x="100" y="240" fill="#ffffff" font-family="system-ui, sans-serif" font-size="64" font-weight="900" letter-spacing="-1">Taza Article</text>
+  <text x="100" y="320" fill="#a7f3d0" font-family="system-ui, sans-serif" font-size="34" font-weight="600">Free Tools, Cloud Perks & Project Guides for CS Students in India</text>
+  
+  <!-- Description -->
+  <text x="100" y="400" fill="#e2e8f0" font-family="system-ui, sans-serif" font-size="22" font-weight="400">Zero database bloat • Ultra-fast static performance • 100% verified student packs</text>
+  
+  <!-- Footer Bar -->
+  <rect x="100" y="480" width="1000" height="1" fill="#34d399" opacity="0.3" />
+  <text x="100" y="530" fill="#cbd5e1" font-family="system-ui, sans-serif" font-size="20" font-weight="500">tazaarticle.com</text>
+</svg>

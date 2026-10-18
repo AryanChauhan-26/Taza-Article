@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+---
+
+<BaseLayout
+  title="About Taza Article"
+  description="Learn about Taza Article — our mission to empower CS and B.Tech engineering students in India with verified free tools, cloud perks, and project blueprints."
+>
+  <div class="mx-auto max-w-3xl px-4 py-14 sm:px-6 lg:px-8">
+    
+    <!-- Hero Header -->
+    <div class="text-center">
+      <div class="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+        🌱 Mission & Brand Story
+      </div>
+      <h1 class="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        About <span class="text-emerald-700 dark:text-emerald-400">Taza Article</span>
+      </h1>
+      <p class="mt-1.5 text-xs sm:text-sm font-medium text-zinc-500 dark:text-zinc-400">
+        "Fresh articles, every week."
+      </p>
+    </div>
+
+    <!-- Editorial Prose -->
+    <div class="mt-10 space-y-7 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+      
+      <div class="rounded-xl border border-zinc-200/80 bg-white p-6 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+        <h2 class="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+          Why "Taza"?
+        </h2>
+        <p class="mt-2 text-xs sm:text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+          In Hindi and Urdu, <em>"Taza"</em> (ताज़ा / تازہ) translates directly to <strong>"Fresh"</strong>. 
+          The tech industry moves at lightning speed, yet academic curricula in many Indian engineering institutions often rely on older toolsets. 
+          <strong>Taza Article</strong> was created with a clear focus: delivering fresh, relevant, and verified software engineering resources every single week.
+        </p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          Our Mission: Leveling the Playing Field
+        </h2>
+        <p class="mt-2">
+          Over 1.5 million students enroll in engineering colleges across India every year. Whether you attend a premier Tier-1 institute or a local college in a Tier-3 city, financial constraints should never prevent a student from accessing industry-grade developer tools.
+        </p>
+        <p class="mt-2">
+          We systematically test and document:
+        </p>
+        <ul class="mt-2 list-disc space-y-1.5 pl-5">
+          <li><strong>Generous Free Tiers:</strong> Cloud hosting, serverless databases, and APIs that do not require international credit cards.</li>
+          <li><strong>Student Discounts & Packs:</strong> Unlocking thousands of dollars in free software using your valid Indian college ID card or student email.</li>
+          <li><strong>Open-Source Alternatives:</strong> Fast, lightweight alternatives to bloated software for coding on budget laptops.</li>
+          <li><strong>Project Blueprints:</strong> Clean code patterns and system architectures that impress recruiters during campus placement interviews.</li>
+        </ul>
+      </div>
+
+      <div class="grid gap-3.5 sm:grid-cols-3 pt-2">
+        <div class="rounded-xl border border-zinc-200/80 p-4 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-2xs">
+          <div class="text-xl">🛡️</div>
+          <h3 class="mt-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100">100% Tested</h3>
+          <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+            Every tool is tested firsthand before we publish a guide.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200/80 p-4 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-2xs">
+          <div class="text-xl">🇮🇳</div>
+          <h3 class="mt-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100">India Focused</h3>
+          <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+            Solutions tailored for Indian college IDs, Rupay cards, and local labs.
+          </p>
+        </div>
+
+        <div class="rounded-xl border border-zinc-200/80 p-4 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-2xs">
+          <div class="text-xl">⚡</div>
+          <h3 class="mt-1.5 text-xs font-bold text-zinc-900 dark:text-zinc-100">Pure Speed</h3>
+          <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+            Built as a static site for near-instant load times with zero tracking bloat.
+          </p>
+        </div>
+      </div>
+
+      <div class="border-t border-zinc-200/70 pt-6 dark:border-zinc-800/70">
+        <h2 class="text-base font-bold text-zinc-900 dark:text-zinc-100">
+          Editorial & Monetization Transparency
+        </h2>
+        <p class="mt-1.5">
+          Taza Article is an independent publication sustained through ethical contextual advertising and occasional affiliate referral commissions on student software. Our editorial integrity is paramount: we never recommend a tool purely for an affiliate payout.
+        </p>
+        <p class="mt-2">
+          Have a question or want to suggest a free tool? Reach out on our 
+          <a href="/contact" class="font-medium text-emerald-700 underline dark:text-emerald-400">Contact page</a>.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</BaseLayout>

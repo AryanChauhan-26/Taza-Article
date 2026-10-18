@@ -1,0 +1,252 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import ShareButtons from '../../components/ShareButtons.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import AdBanner from '../../components/AdBanner.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection, render } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
+import { getCategorySlug } from '../../utils/slugify';
+import { siteConfig } from '../../config/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ id }) => !id.startsWith('_'));
+  return posts.map((post) => {
+    const categorySlug = getCategorySlug(post.data.category);
+    const slug = post.id.replace(/\.(md|mdx)$/, '');
+    return {
+      params: { category: categorySlug, slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+const cleanSlug = post.id.replace(/\.(md|mdx)$/, '');
+const categorySlug = getCategorySlug(post.data.category);
+const currentUrl = `${siteConfig.siteUrl}/${categorySlug}/${cleanSlug}`;
+const readingTime = getReadingTime(post.body || post.data.description);
+const formattedDate = new Intl.DateTimeFormat('en-IN', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(new Date(post.data.pubDate));
+
+// Related articles: fetch posts in same category or matching tags
+const allPosts = await getCollection('blog', ({ id }) => !id.startsWith('_') && id !== post.id);
+const relatedPosts = allPosts
+  .filter((p) => p.data.category === post.data.category || p.data.tags.some((t) => post.data.tags.includes(t)))
+  .slice(0, 2);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  article={{
+    publishedTime: new Date(post.data.pubDate).toISOString(),
+    modifiedTime: post.data.updatedDate ? new Date(post.data.updatedDate).toISOString() : undefined,
+    category: post.data.category,
+    tags: post.data.tags,
+    author: post.data.author,
+  }}
+  canonicalUrl={currentUrl}
+>
+  <div class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+    
+    <!-- Breadcrumb navigation -->
+    <nav class="mb-5 flex items-center space-x-1.5 text-xs text-zinc-400 dark:text-zinc-500" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-zinc-700 transition-colors dark:hover:text-zinc-300">Home</a>
+      <span>/</span>
+      <a href={`/category/${categorySlug}`} class="hover:text-zinc-700 transition-colors dark:hover:text-zinc-300">
+        {post.data.category}
+      </a>
+      <span>/</span>
+      <span class="truncate max-w-xs text-zinc-600 dark:text-zinc-400">{post.data.title}</span>
+    </nav>
+
+    <!-- Main Grid: Article Content + Sidebar -->
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-12">
+      
+      <!-- Article Main Column -->
+      <article class="lg:col-span-8">
+        
+        <!-- Header -->
+        <header class="pb-5 border-b border-zinc-200/70 dark:border-zinc-800/70">
+          
+          <!-- Category & Reading Time Badge -->
+          <div class="flex flex-wrap items-center gap-2 pb-2.5">
+            <a
+              href={`/category/${categorySlug}`}
+              class="rounded-md bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 hover:bg-zinc-200 transition-colors dark:bg-zinc-800 dark:text-zinc-300"
+            >
+              {post.data.category}
+            </a>
+            <span class="text-xs text-zinc-300 dark:text-zinc-700">•</span>
+            <span class="text-xs text-zinc-500 dark:text-zinc-400">{readingTime}</span>
+            <span class="text-xs text-zinc-300 dark:text-zinc-700">•</span>
+            <time datetime={new Date(post.data.pubDate).toISOString()} class="text-xs text-zinc-500 dark:text-zinc-400">
+              {formattedDate}
+            </time>
+          </div>
+
+          <!-- Main H1 Title -->
+          <h1 class="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl lg:text-3.5xl dark:text-zinc-100 leading-tight">
+            {post.data.title}
+          </h1>
+
+          <!-- Excerpt -->
+          <p class="mt-3 text-sm sm:text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+            {post.data.description}
+          </p>
+
+          <!-- Author attribution & fresh tag -->
+          <div class="mt-5 flex items-center justify-between gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+            <div class="flex items-center gap-2">
+              <div class="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 font-bold text-[10px] text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                TA
+              </div>
+              <span>By <strong class="text-zinc-700 dark:text-zinc-300 font-medium">{post.data.author}</strong></span>
+            </div>
+            <span class="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400">
+              🌱 Verified Resource
+            </span>
+          </div>
+        </header>
+
+        <!-- Affiliate Disclosure Note at Top of Article -->
+        {post.data.affiliateDisclosure && (
+          <div class="my-5">
+            <AffiliateDisclosure />
+          </div>
+        )}
+
+        <!-- Top Reserved Ad Slot (Below Title) -->
+        <AdBanner slotType="below-title" />
+
+        <!-- Mobile Table of Contents -->
+        <div class="block lg:hidden">
+          <TableOfContents headings={headings} />
+        </div>
+
+        <!-- Article Prose Content (Smooth Typography) -->
+        <div class="prose prose-zinc max-w-none pt-3 dark:prose-invert prose-headings:scroll-mt-20 prose-headings:font-bold prose-headings:tracking-tight prose-a:text-emerald-700 hover:prose-a:underline dark:prose-a:text-emerald-400 prose-img:rounded-xl prose-pre:rounded-xl prose-p:leading-relaxed">
+          <Content />
+        </div>
+
+        <!-- Mid-Article / In-Article Reserved Ad Slot -->
+        <div class="my-8">
+          <AdBanner slotType="in-article" />
+        </div>
+
+        <!-- Tags List -->
+        {post.data.tags.length > 0 && (
+          <div class="my-6 flex flex-wrap items-center gap-1.5 border-t border-b border-zinc-200/70 py-3 dark:border-zinc-800/70">
+            <span class="text-xs text-zinc-400 dark:text-zinc-500 mr-1">
+              Tags:
+            </span>
+            {post.data.tags.map((tag) => (
+              <a
+                href={`/search?q=${encodeURIComponent(tag)}`}
+                class="rounded bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 hover:bg-zinc-200 transition-colors dark:bg-zinc-800 dark:text-zinc-300"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+
+        <!-- Share Buttons -->
+        <ShareButtons title={post.data.title} url={currentUrl} />
+
+        <!-- Bottom Affiliate Disclosure -->
+        {post.data.affiliateDisclosure && (
+          <div class="my-6">
+            <AffiliateDisclosure />
+          </div>
+        )}
+
+      </article>
+
+      <!-- Sidebar Column -->
+      <aside class="space-y-6 lg:col-span-4">
+        
+        <!-- Desktop Table of Contents -->
+        <div class="sticky top-20 space-y-6">
+          <div class="hidden lg:block">
+            <TableOfContents headings={headings} />
+          </div>
+
+          <!-- Sidebar Reserved Ad Slot -->
+          <AdBanner slotType="sidebar" />
+
+          <!-- Quick Newsletter Subscription Box -->
+          <div class="rounded-xl border border-zinc-200/80 bg-white p-4.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+            <div class="flex items-center gap-1.5">
+              <span class="text-sm">📬</span>
+              <h4 class="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                Fresh weekly updates
+              </h4>
+            </div>
+            <p class="mt-1.5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              Get free tools and student perks delivered every weekend.
+            </p>
+            <a
+              href="/#newsletter-form"
+              class="mt-3 block w-full rounded-lg bg-emerald-700 px-3 py-2 text-center text-xs font-semibold text-white shadow-2xs hover:bg-emerald-800 transition-colors dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            >
+              Subscribe Free →
+            </a>
+          </div>
+
+          <!-- Brand About Snippet -->
+          <div class="rounded-xl border border-zinc-200/80 bg-white p-4.5 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900">
+            <h4 class="text-[11px] font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+              About Taza Article
+            </h4>
+            <p class="mt-1.5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+              "Taza" means fresh. Curated developer resources and project blueprints for Indian B.Tech & CS students.
+            </p>
+            <a href="/about" class="mt-2.5 inline-block text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-400">
+              Read our mission →
+            </a>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- Related Articles Section -->
+    {relatedPosts.length > 0 && (
+      <section class="mt-16 border-t border-zinc-200/70 pt-10 dark:border-zinc-800/70">
+        <div class="mb-5">
+          <h2 class="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+            Related Guides
+          </h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+            More student resources in this domain.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+          {relatedPosts.map((related) => (
+            <ArticleCard
+              title={related.data.title}
+              description={related.data.description}
+              pubDate={new Date(related.data.pubDate)}
+              category={related.data.category}
+              tags={related.data.tags}
+              slug={related.id.replace(/\.(md|mdx)$/, '')}
+              rawContent={related.body}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+  </div>
+</BaseLayout>

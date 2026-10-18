@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../config/site';
+
+const lastUpdated = 'October 17, 2026';
+---
+
+<BaseLayout
+  title="Terms & Conditions"
+  description="Terms and conditions for using Taza Article website and developer resource guides."
+>
+  <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
+    <div class="border-b border-gray-100 pb-6 dark:border-gray-800">
+      <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+        Legal & Compliance
+      </span>
+      <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+        Terms and Conditions
+      </h1>
+      <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        Last updated: {lastUpdated}
+      </p>
+    </div>
+
+    <div class="prose prose-emerald mt-8 max-w-none text-sm text-gray-700 dark:prose-invert dark:text-gray-300">
+      <p>
+        Welcome to <strong>{siteConfig.name}</strong>. These terms and conditions outline the rules and regulations for the use of {siteConfig.name}'s Website, located at <a href={siteConfig.siteUrl}>{siteConfig.siteUrl}</a>.
+      </p>
+
+      <h2>1. Intellectual Property Rights</h2>
+      <p>
+        Unless otherwise stated, {siteConfig.name} and/or its licensors own the intellectual property rights for all material on {siteConfig.name}. All intellectual property rights are reserved. You may access this from {siteConfig.name} for your own personal and educational use subject to restrictions set in these terms and conditions.
+      </p>
+
+      <h2>2. Permitted Use</h2>
+      <p>You may:</p>
+      <ul>
+        <li>Read, bookmark, and share our educational guides with your college peers and study groups.</li>
+        <li>Implement the code examples and architectural blueprints in your non-commercial academic college projects.</li>
+      </ul>
+
+      <p>You must not:</p>
+      <ul>
+        <li>Republish entire articles from {siteConfig.name} without prior written attribution.</li>
+        <li>Sell, rent, or sub-license material from {siteConfig.name}.</li>
+        <li>Reproduce, duplicate, or copy material for commercial syndication.</li>
+      </ul>
+
+      <h2>3. Disclaimer and Educational Notice</h2>
+      <p>
+        The tools, cloud services, and student packs reviewed on {siteConfig.name} are provided by third-party companies. While we strive to ensure that all information regarding free tiers and student discount eligibility is accurate at the time of publication, companies may alter their terms, pricing, or verification criteria at any time.
+      </p>
+      <p>
+        {siteConfig.name} is not responsible for any unexpected charges, service downtime, or account issues incurred on third-party cloud platforms.
+      </p>
+
+      <h2>4. Hyperlinking to Our Content</h2>
+      <p>
+        Educational institutions, universities, coding blogs, and tech communities may link to our home page or individual articles without prior written approval, provided the link is not misleading or disparaging.
+      </p>
+
+      <h2>5. Contact Information</h2>
+      <p>
+        If you have any questions regarding our terms, please contact us at <a href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

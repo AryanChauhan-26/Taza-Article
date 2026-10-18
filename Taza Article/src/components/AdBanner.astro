@@ -1,0 +1,78 @@
+---
+import { siteConfig } from '../config/site';
+
+interface Props {
+  slotType: 'below-title' | 'in-article' | 'sidebar' | 'footer';
+  adSlotId?: string; // Optional specific Google AdSense data-ad-slot
+  className?: string;
+}
+
+const { slotType, adSlotId = '1234567890', className = '' } = Astro.props;
+
+// Specific dimensions or styling based on ad placement to prevent CLS (Cumulative Layout Shift)
+const slotDetails = {
+  'below-title': {
+    format: 'horizontal',
+    title: 'Sponsored Notice / Leaderboard Ad',
+    minHeight: 'min-h-[90px] md:min-h-[100px]',
+  },
+  'in-article': {
+    format: 'rectangle',
+    title: 'Recommended Partner / In-Article Ad',
+    minHeight: 'min-h-[250px]',
+  },
+  'sidebar': {
+    format: 'vertical',
+    title: 'Featured Sponsor / Sidebar Ad',
+    minHeight: 'min-h-[300px] md:min-h-[500px]',
+  },
+  'footer': {
+    format: 'horizontal',
+    title: 'Partner Offer / Footer Ad',
+    minHeight: 'min-h-[120px]',
+  }
+}[slotType];
+---
+
+{siteConfig.adsEnabled && (
+  <aside 
+    class={`ad-container my-5 w-full overflow-hidden rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 p-4 transition-all ${slotDetails.minHeight} ${className}`}
+    aria-label="Advertisement"
+  >
+    <div class="flex items-center justify-between pb-2 text-[10px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+      <span>Advertisement</span>
+      <span class="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+        Slot: {slotType}
+      </span>
+    </div>
+
+    <!-- 
+      GOOGLE ADSENSE INTEGRATION:
+      To show live Google AdSense ads:
+      1. Add your AdSense Client ID in src/config/site.ts
+      2. Uncomment the <ins> block below and replace data-ad-slot with your real ad unit ID.
+    -->
+    <div class="flex flex-col items-center justify-center py-4 text-center">
+      {/* 
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client={siteConfig.adsenseClientId}
+           data-ad-slot={adSlotId}
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script is:inline>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      */}
+
+      <!-- Placeholder preview (visible until live AdSense code is active) -->
+      <div class="flex flex-col items-center justify-center space-y-1.5 py-3 text-gray-400 dark:text-gray-500">
+        <svg class="h-6 w-6 stroke-current opacity-60" fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">{slotDetails.title}</span>
+        <span class="text-[11px] text-gray-500 dark:text-gray-400">Reserved monetization container (AdSense compliant, Zero CLS)</span>
+      </div>
+    </div>
+  </aside>
+)}

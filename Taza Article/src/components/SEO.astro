@@ -1,0 +1,170 @@
+---
+import { siteConfig } from '../config/site';
+import { getCategorySlug } from '../utils/slugify';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    category: string;
+    tags: string[];
+    author: string;
+  };
+  canonicalUrl?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = siteConfig.description,
+  image = siteConfig.defaultOgImage,
+  article,
+  canonicalUrl,
+  noindex = false,
+} = Astro.props;
+
+// Page Title Formatting: "Title | Taza Article - Fresh articles, every week"
+const formattedTitle = title
+  ? `${title} | ${siteConfig.name}`
+  : `${siteConfig.name} - ${siteConfig.tagline}`;
+
+const canonical = canonicalUrl || new URL(Astro.url.pathname, siteConfig.siteUrl).href;
+const ogImage = image.startsWith('http') ? image : new URL(image, siteConfig.siteUrl).href;
+
+// JSON-LD Schema
+const schemaWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  'name': siteConfig.name,
+  'alternateName': 'Taza Article',
+  'url': siteConfig.siteUrl,
+  'description': siteConfig.description,
+  'potentialAction': {
+    '@type': 'SearchAction',
+    'target': `${siteConfig.siteUrl}/search?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const schemaArticle = article
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      'headline': title,
+      'description': description,
+      'image': [ogImage],
+      'datePublished': article.publishedTime,
+      'dateModified': article.modifiedTime || article.publishedTime,
+      'author': {
+        '@type': 'Organization',
+        'name': article.author || siteConfig.author,
+        'url': siteConfig.siteUrl,
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': siteConfig.name,
+        'url': siteConfig.siteUrl,
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${siteConfig.siteUrl}/favicon.svg`,
+        },
+      },
+      'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': canonical,
+      },
+      'articleSection': article.category,
+      'keywords': article.tags.join(', '),
+    }
+  : null;
+
+const schemaBreadcrumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Home',
+      'item': siteConfig.siteUrl,
+    },
+    ...(article
+      ? [
+          {
+            '@type': 'ListItem',
+            'position': 2,
+            'name': article.category,
+            'item': `${siteConfig.siteUrl}/category/${getCategorySlug(article.category)}`,
+          },
+          {
+            '@type': 'ListItem',
+            'position': 3,
+            'name': title,
+            'item': canonical,
+          },
+        ]
+      : []),
+  ],
+};
+---
+
+<!-- Essential Meta Tags -->
+<title>{formattedTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={article ? 'article' : 'website'} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={formattedTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={siteConfig.name} />
+<meta property="og:locale" content="en_US" />
+
+{article && (
+  <>
+    <meta property="article:published_time" content={article.publishedTime} />
+    {article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+    <meta property="article:section" content={article.category} />
+    {article.tags.map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
+  </>
+)}
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={siteConfig.twitterHandle} />
+<meta name="twitter:creator" content={siteConfig.twitterHandle} />
+<meta name="twitter:title" content={formattedTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Google Search Console Verification Meta Tag -->
+{siteConfig.googleSiteVerification && siteConfig.googleSiteVerification !== 'GOOGLE-VERIFICATION-PLACEHOLDER' && (
+  <meta name="google-site-verification" content={siteConfig.googleSiteVerification} />
+)}
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(schemaWebsite)} />
+{schemaArticle && <script type="application/ld+json" set:html={JSON.stringify(schemaArticle)} />}
+<script type="application/ld+json" set:html={JSON.stringify(schemaBreadcrumbs)} />
+
+<!-- Google Analytics (GA4) -->
+{siteConfig.googleAnalyticsId && siteConfig.googleAnalyticsId !== 'G-PLACEHOLDER' && (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}></script>
+    <script is:inline define:vars={{ gaId: siteConfig.googleAnalyticsId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', gaId);
+    </script>
+  </>
+)}

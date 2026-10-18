@@ -1,0 +1,106 @@
+---
+import { getReadingTime } from '../utils/readingTime';
+import { getCategorySlug } from '../utils/slugify';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  category: string;
+  tags?: string[];
+  slug: string;
+  rawContent?: string;
+  heroImage?: string;
+  featured?: boolean;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  category,
+  tags = [],
+  slug,
+  rawContent = '',
+  heroImage,
+  featured = false,
+} = Astro.props;
+
+const readingTime = getReadingTime(rawContent || description);
+const formattedDate = new Intl.DateTimeFormat('en-IN', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+}).format(pubDate);
+
+// Clean URL: /[category]/[slug]
+const categorySlug = getCategorySlug(category);
+const articleUrl = `/${categorySlug}/${slug}`;
+---
+
+<article 
+  class={`group relative flex flex-col justify-between overflow-hidden rounded-xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm ${
+    featured
+      ? 'border-zinc-300/80 bg-white shadow-2xs dark:border-zinc-700/80 dark:bg-zinc-900 md:col-span-2'
+      : 'border-zinc-200/80 bg-white shadow-2xs dark:border-zinc-800/80 dark:bg-zinc-900'
+  }`}
+>
+  <div class="p-5 sm:p-6">
+    <!-- Meta row: Category Badge, Featured Badge & Read Time -->
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3">
+      <div class="flex items-center gap-1.5">
+        <a
+          href={`/category/${categorySlug}`}
+          class="inline-flex items-center rounded-md bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-700 hover:bg-zinc-200 transition-colors dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-750"
+        >
+          {category}
+        </a>
+        {featured && (
+          <span class="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+            Featured
+          </span>
+        )}
+      </div>
+
+      <div class="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span>•</span>
+        <span>{readingTime}</span>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h3 class={`font-bold tracking-tight text-zinc-900 transition-colors duration-150 group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-400 ${
+      featured ? 'text-lg sm:text-xl' : 'text-base sm:text-lg'
+    }`}>
+      <a href={articleUrl} class="focus:outline-none">
+        <span class="absolute inset-0 z-0"></span>
+        {title}
+      </a>
+    </h3>
+
+    <!-- Description -->
+    <p class="mt-2 line-clamp-2 text-xs sm:text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+      {description}
+    </p>
+
+    <!-- Tags -->
+    {tags.length > 0 && (
+      <div class="relative z-10 mt-3.5 flex flex-wrap gap-1">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="rounded bg-zinc-100/80 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-800/80 dark:text-zinc-400">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <!-- Bottom CTA Row -->
+  <div class="border-t border-zinc-100 px-5 py-2.5 sm:px-6 dark:border-zinc-800/80 bg-zinc-50/40 dark:bg-zinc-850/30">
+    <div class="flex items-center justify-between text-xs font-medium text-emerald-700 group-hover:text-emerald-800 dark:text-emerald-400 dark:group-hover:text-emerald-300">
+      <span>Read article</span>
+      <span class="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
+    </div>
+  </div>
+</article>

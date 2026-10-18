@@ -1,0 +1,6 @@
+# The Astro site lives in the "Taza Article" subfolder, so Netlify needs to
+# build from there instead of the repository root.
+[build]
+  base = "Taza Article"
+  command = "npm ci && npm run build"
+  publish = "dist"

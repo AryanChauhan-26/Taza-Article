@@ -1,0 +1,11 @@
+{
+  "name": "taza-article-workspace",
+  "private": true,
+  "scripts": {
+    "setup": "npm --prefix \"Taza Article\" install",
+    "dev": "npm --prefix \"Taza Article\" run dev",
+    "build": "npm --prefix \"Taza Article\" run build",
+    "preview": "npm --prefix \"Taza Article\" run preview",
+    "astro": "npm --prefix \"Taza Article\" run astro"
+  }
+}

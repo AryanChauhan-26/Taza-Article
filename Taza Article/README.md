@@ -180,6 +180,10 @@ If you want to repurpose this blog for a different niche (e.g. personal finance,
 This site is statically generated and has **zero server dependencies** and **no database requirements**. It is 100% free to host forever.
 
 ### Option 1: Deploy to Vercel (Recommended)
+Set the Vercel project **Root Directory** to `Taza Article` so it can find
+the Astro package and configuration files. The build command is `npm run build`
+and the output directory is `dist`.
+
 1. Push this repository to your GitHub account:
    ```bash
    git init
@@ -195,6 +199,8 @@ This site is statically generated and has **zero server dependencies** and **no 
 5. Click **"Deploy"**. Your site will be live on a fast global edge network in under 1 minute.
 
 ### Option 2: Deploy to Netlify
+Set the Netlify **Base directory** to `Taza Article`.
+
 1. Log in to [Netlify](https://www.netlify.com).
 2. Click **"Add new site"** → **"Import an existing project"** → Select **GitHub**.
 3. Set Build Command: `npm run build`

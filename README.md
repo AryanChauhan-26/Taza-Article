@@ -1,4 +1,29 @@
-Taza-Article
+# Taza Article
+
+The Astro website lives in [`Taza Article/`](./Taza%20Article/).
+
+## Run locally
+
+From the repository root:
+
+```bash
+npm run setup
+npm run dev
+```
+
+Open [http://localhost:4321](http://localhost:4321). To create and preview a
+production build, run:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Deployment
+
+When connecting this repository to a hosting provider, set the project root
+directory to `Taza Article`. Use `npm run build` as the build command and
+`dist` as the output directory.
 
 Taza Article brings you fresh, easy-to-read articles on free tools, tech, and career tips for students and beginners. Every post is researched, practical, and written to save you time, so you can learn something useful and take action in minutes. New articles added every week.
 
